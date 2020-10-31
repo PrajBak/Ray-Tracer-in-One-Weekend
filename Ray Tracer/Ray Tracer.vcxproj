@@ -142,6 +142,7 @@
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="frame_buffer.h" />
     <ClInclude Include="hittable_objects.h" />
     <ClInclude Include="hit_info.h" />

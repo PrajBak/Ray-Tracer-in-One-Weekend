@@ -1,11 +1,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdexcept>
+#include "camera.h"
 #include "frame_buffer.h"
 #include "hittable_objects.h"
 #include "sphere.h"
 
-//Storing image data into a ppm image
-//in top left to bottom right order
 
 float3 get_color(ray r, hittable_object& scene) {
 
@@ -40,12 +39,7 @@ int main() {
     frame_buffer fb(400, 225);
 
     //Camera
-    float asp = fb.asp();
-    float view_height = 2.0f;
-    float view_width = view_height * asp;
-    float3 ray_origin(0.0f);
-    float focal_length = 1.0f;
-    const float3 lower_left(-view_width/2.0f, -view_height/2.0f, -focal_length);
+    camera cam(float3(0.0f), fb.width(), fb.height());
 
 
     //Scene
@@ -67,8 +61,7 @@ int main() {
                 float u = float(col + random_float()) / (fb.width() - 1);
                 float v = float(row + random_float()) / (fb.height() - 1);
 
-                ray r(ray_origin, lower_left + u * float3(view_width, 0.0, 0.0)
-                    + v * float3(0.0, view_height, 0.0) - ray_origin);
+                ray r = cam.get_ray_to(u, v);
 
                 color += get_color(r, scene);
             }
@@ -76,6 +69,5 @@ int main() {
             fb.set_pixel(row, col, color, factor);
         }
     }
-
     fb.save("D:\\image.ppm");
 }
