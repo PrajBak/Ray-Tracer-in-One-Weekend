@@ -16,12 +16,6 @@ const float PI = 3.141592654f;
 
 const float DEG_TO_PI = PI / 180.0f;
 
-inline float random_float() {
-	static std::uniform_real_distribution<double> distribution(0.0f, 1.0f);
-	static std::mt19937 generator;
-	return distribution(generator);
-}
-
 class float3 {
 	public:
 		float3()
@@ -188,4 +182,23 @@ float3& operator/(const float3& obj, const float scalar) {
 	temp->z_ = obj.z_ / scalar;
 
 	return *temp;
+}
+
+//Utility Fucntions
+inline float clamp(const float x, const float min, const float max) {
+	return x < min ? min : x > max ? max : x;
+}
+
+inline float3 clamp(const float3& obj, const float min, const float max) {
+	float x = clamp(obj.x(), min, max);
+	float y = clamp(obj.y(), min, max);
+	float z = clamp(obj.z(), min, max);
+
+	return float3(x, y, z);
+}
+
+inline float random_float() {
+	static std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
+	static std::mt19937 generator;
+	return distribution(generator);
 }
