@@ -16,14 +16,12 @@ class frame_buffer {
             :   width_(0),
                 height_(0),
                 channels_(0),
-                asp_(1.0f),
                 data_(NULL) {}
 
         frame_buffer(int width, int height)
             :   width_(width),
                 height_(height),
                 channels_(3),
-                asp_((float) width / height),
                 data_((float*)malloc(double(channels_) * double(width_) * double(height_) * double(sizeof(float)))) {}
     
         ~frame_buffer() {
@@ -68,10 +66,6 @@ class frame_buffer {
             return height_;
         }
 
-        const float asp() const {
-            return asp_;
-        }
-
     private:
         void set_pixel(
             const int row,
@@ -94,7 +88,6 @@ class frame_buffer {
         const int width_;
         const int height_;
         const int channels_;
-        const float asp_;
         float* data_;
     
 };
