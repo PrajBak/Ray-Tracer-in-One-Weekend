@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#include <stdexcept>
 #include "frame_buffer.h"
 #include "hittable_objects.h"
 #include "sphere.h"
@@ -40,11 +41,11 @@ int main() {
 
     //Camera
     float asp = fb.asp();
-    float view_height = 2.0;
+    float view_height = 2.0f;
     float view_width = view_height * asp;
-    float3 ray_origin(0.0);
-    float focal_length = 1.0;
-    const float3 lower_left(-view_width/2.0, -view_height/2.0, -focal_length);
+    float3 ray_origin(0.0f);
+    float focal_length = 1.0f;
+    const float3 lower_left(-view_width/2.0f, -view_height/2.0f, -focal_length);
 
 
     //Scene
@@ -52,19 +53,27 @@ int main() {
     scene.add_hittable_object(std::make_shared<sphere>(float3(0.0f, 0.0f, -1.0f), 0.5f));
     scene.add_hittable_object(std::make_shared<sphere>(float3(0.0f, -100.5f, -1.0f), 100.0f));
     
+    const int samples_per_pixel = 100;
+    float factor = 1.0f / samples_per_pixel;
+    float3 color;
 
     //Renderer
     for (int row = 0; row < fb.height(); ++row) {
         for (int col = 0; col < fb.width(); ++col) {
 
-            float u = float(col) / (fb.width() - 1);
-            float v = float(row) / (fb.height() - 1);
+            color = float3(0.0);
+            for (int sample_no = 0; sample_no < samples_per_pixel; sample_no++) {
 
-            ray r(ray_origin, lower_left + u * float3(view_width, 0.0, 0.0) 
-                  + v * float3(0.0, view_height, 0.0) - ray_origin);
+                float u = float(col + random_float()) / (fb.width() - 1);
+                float v = float(row + random_float()) / (fb.height() - 1);
 
-            float3 color = get_color(r, scene);
-            fb.set_pixel(row, col, color);
+                ray r(ray_origin, lower_left + u * float3(view_width, 0.0, 0.0)
+                    + v * float3(0.0, view_height, 0.0) - ray_origin);
+
+                color += get_color(r, scene);
+            }
+
+            fb.set_pixel(row, col, color, factor);
         }
     }
 
