@@ -5,10 +5,18 @@
 class sphere : public hittable_object {
 	public:
 		sphere()
-			:	centre_(0.0f), radius_(0.0f) {}
+			:	centre_(0.0f),
+				radius_(0.0f),
+				albedo_(float3(0.0f)),
+				reflectance_(float3(0.0f)),
+				ambient_coeff_(float3(0.0f)) {}
 
-		sphere(float3 centre, float radius)
-			:	centre_(centre), radius_(radius) {}
+		sphere(float3 centre, float radius, float3 albedo, float3 reflectance, float3 ambient_coeff)
+			:	centre_(centre),
+				radius_(radius),
+				albedo_(albedo),
+				reflectance_(reflectance),
+				ambient_coeff_(ambient_coeff) {}
 
 		const bool isHit(
 			const ray& r, 
@@ -29,6 +37,9 @@ class sphere : public hittable_object {
 					hi.t_ = t;
 					hi.poc_ = r.ray_at_point(t);
 					hi.normal_ = (hi.poc_ - centre_) / radius_;
+					hi.albedo_ = albedo_;
+					hi.reflectance_ = reflectance_;
+					hi.ambient_coeff_ = ambient_coeff_;
 					hi.correct_normal(r.ray_direction());
 					return true;
 				}
@@ -38,7 +49,10 @@ class sphere : public hittable_object {
 					hi.t_ = t;
 					hi.poc_ = r.ray_at_point(t);
 					hi.normal_ = (hi.poc_ - centre_) / radius_;
-
+					hi.albedo_ = albedo_;
+					hi.reflectance_ = reflectance_;
+					hi.ambient_coeff_ = ambient_coeff_;
+					hi.correct_normal(r.ray_direction());
 					return true;
 				}
 			}
@@ -47,6 +61,9 @@ class sphere : public hittable_object {
 			hi.poc_ = float3(-100000.0f);
 			hi.normal_ = float3(0.0f);
 			hi.front_face_ = false;
+			hi.albedo_ = float3(0.0f);
+			hi.reflectance_ = float3(0.0f);
+			hi.ambient_coeff_ = float3(0.0f);
 
 			return false;
 		}
@@ -60,6 +77,9 @@ class sphere : public hittable_object {
 		}
 
 	private:
-		const float3 centre_;
 		const float radius_;
+		const float3 centre_;
+		const float3 albedo_;
+		const float3 reflectance_;
+		const float3 ambient_coeff_;
 };

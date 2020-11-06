@@ -147,6 +147,7 @@
     <ClInclude Include="hittable_objects.h" />
     <ClInclude Include="hit_info.h" />
     <ClInclude Include="hittable_object.h" />
+    <ClInclude Include="light.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="s1mo_maths.h" />
     <ClInclude Include="sphere.h" />

@@ -51,7 +51,7 @@ class float3 {
 		}
 
 		float3& operator+(const float3& obj) const {
-			float3* temp = new float3();
+			float3* temp = new float3(0.0f);
 			temp->x_ = x_ + obj.x_;
 			temp->y_ = y_ + obj.y_;
 			temp->z_ = z_ + obj.z_;
@@ -60,7 +60,7 @@ class float3 {
 		}
 
 		float3& operator-(const float3& obj) const {
-			float3* temp = new float3();
+			float3* temp = new float3(0.0f);
 			temp->x_ = x_ - obj.x_;
 			temp->y_ = y_ - obj.y_;
 			temp->z_ = z_ - obj.z_;
@@ -155,7 +155,7 @@ std::ostream& operator<<(std::ostream& os, const float3& obj) {
 }
 
 float3& operator*(const float3& obj, const float scalar) {
-	float3* temp = new float3(obj);
+	float3* temp = new float3(0.0f);
 	temp->x_ = obj.x_ * scalar;
 	temp->y_ = obj.y_ * scalar;
 	temp->z_ = obj.z_ * scalar;
@@ -164,7 +164,7 @@ float3& operator*(const float3& obj, const float scalar) {
 }
 
 float3& operator*(const float scalar, const float3& obj) {
-	float3* temp = new float3(obj);
+	float3* temp = new float3(0.0f);
 	temp->x_ = scalar * obj.x_;
 	temp->y_ = scalar * obj.y_;
 	temp->z_ = scalar * obj.z_;
@@ -176,7 +176,7 @@ float3& operator/(const float3& obj, const float scalar) {
 
 	assert(scalar != 0.0f);
 
-	float3* temp = new float3(obj);
+	float3* temp = new float3(0.0f);
 	temp->x_ = obj.x_ / scalar;
 	temp->y_ = obj.y_ / scalar;
 	temp->z_ = obj.z_ / scalar;
@@ -201,4 +201,11 @@ inline float random_float() {
 	static std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
 	static std::mt19937 generator;
 	return distribution(generator);
+}
+
+inline float max(float min_value, float var_value) {
+	if (var_value < min_value)
+		return min_value;
+
+	return var_value;
 }
