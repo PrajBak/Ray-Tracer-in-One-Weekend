@@ -25,6 +25,10 @@ class light {
 			return color;
 		}
 
+		const float3 position() const {
+			return position_;
+		}
+
 	private:
 		float3 lambertian_color(
 			const hit_info& hi,
