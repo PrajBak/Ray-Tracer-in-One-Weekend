@@ -12,6 +12,7 @@ float3 get_color(ray r, hittable_object& scene, light li) {
 
     hit_info hi;
 
+    //Check if an object was hit
     if (scene.isHit(r, 0.001f, 1000.0f, hi)) {
 
         //Computing if a point is in shadow.
@@ -19,6 +20,7 @@ float3 get_color(ray r, hittable_object& scene, light li) {
         const float3 point = hi.poc_;
         const float3 point_to_light = li.position() - point;
         const ray shadow_ray(point, point_to_light);
+        //Check if ray from point to light hits an object 
         if (scene.isHit(shadow_ray, 0.001f, 1000.0f, shadow_hi)) {
             color = float3(0.01f);
         }
