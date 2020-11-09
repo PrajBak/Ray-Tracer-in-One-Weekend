@@ -29,34 +29,7 @@ class sphere : public hittable_object {
 			const float b = r.ray_direction() * (roc);
 			const float c = roc * roc - radius_ * radius_;
 
-			const float discriminant = b * b - a * c;
-
-			if (discriminant >= 0.0f) {
-				float t = (-b - sqrt(discriminant)) / a;
-				if (t > t0 && t < t1) {
-					hi.t_ = t;
-					hi.poc_ = r.ray_at_point(t);
-					hi.normal_ = (hi.poc_ - centre_) / radius_;
-					hi.albedo_ = albedo_;
-					hi.reflectance_ = reflectance_;
-					hi.ambient_coeff_ = ambient_coeff_;
-					hi.correct_normal(r.ray_direction());
-					return true;
-				}
-
-				t = (-b + sqrt(discriminant)) / a;
-				if (t > t0 && t < t1) {
-					hi.t_ = t;
-					hi.poc_ = r.ray_at_point(t);
-					hi.normal_ = (hi.poc_ - centre_) / radius_;
-					hi.albedo_ = albedo_;
-					hi.reflectance_ = reflectance_;
-					hi.ambient_coeff_ = ambient_coeff_;
-					hi.correct_normal(r.ray_direction());
-					return true;
-				}
-			}
-
+			//default values for hitinfo
 			hi.t_ = -100000.0f;
 			hi.poc_ = float3(-100000.0f);
 			hi.normal_ = float3(0.0f);
@@ -65,7 +38,24 @@ class sphere : public hittable_object {
 			hi.reflectance_ = float3(0.0f);
 			hi.ambient_coeff_ = float3(0.0f);
 
-			return false;
+			const float discriminant = b * b - a * c;
+			if (discriminant < 0.0f)
+				return false;
+
+			float t = (-b - sqrt(discriminant)) / a;
+			if (t < t0 || t > t1) {
+				t = (-b + sqrt(discriminant)) / a;
+				if (t < t0 || t > t1)
+					return false;
+			}
+
+			hi.t_ = t;
+			hi.poc_ = r.ray_at_point(t);
+			hi.normal_ = (hi.poc_ - centre_) / radius_;
+			hi.albedo_ = albedo_;
+			hi.reflectance_ = reflectance_;
+			hi.ambient_coeff_ = ambient_coeff_;
+			return true;
 		}
 
 		const float3 centre() const {
